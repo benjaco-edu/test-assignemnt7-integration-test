@@ -6,7 +6,7 @@ const Mysql = require('./../app/sqlExecuters/Mysql');
 const sinon = require('sinon');
 
 
-it("Try external production database", async function () {
+it("Mock database", async function () {
     let mysql = new Mysql;
     let databaseMock = sinon.mock(mysql);
 
