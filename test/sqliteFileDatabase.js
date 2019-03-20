@@ -41,7 +41,7 @@ create table creditcards
     });
 
 
-    it("Mock database", async function () {
+    it("saves and retrieves account", async function () {
 
         let dataMapper = new DataMapper();
         dataMapper.setDataSource(db.query);

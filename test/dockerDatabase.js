@@ -2,41 +2,32 @@ const chai = require('chai');
 const expect = chai.expect;
 const Account = require('./../app/Account');
 const DataMapper = require('./../app/DataMapper');
-const Sqllite = require('../app/sqlExecuters/Sqlite');
+const Mysql = require('./../app/sqlExecuters/Mysql');
+const DockerDB = require("./dockerDB");
 
-
-describe("sqlite memory", function () {
+describe("docker database", function () {
+    this.timeout(0);
     let db;
+    let dockerDB = new DockerDB(__dirname + "/../setup.sql");
+
     before(async  () => {
-        db = new Sqllite(); // memory is the default in my
-        await db.createDatabase();
-
-        await db.query`
-create table accounts
-(
-  id      INTEGER PRIMARY KEY AUTOINCREMENT ,
-  balance double(11, 2)
-);
-`;
-        await db.query`
-create table creditcards
-(
-  id            INTEGER PRIMARY KEY AUTOINCREMENT ,
-  account     int,
-  last_used     datetime,
-  pin           char(4),
-  blocked       bool,
-  wrongAttempts int
-);
-`;
+        db = new Mysql();
+        await dockerDB.createDatabase();
+        await db.connect(dockerDB.connectionDetails);
     });
+
+
+    after(async () => {
+        await dockerDB.kill();
+    });
+
     beforeEach(async () => {
-        await db.query`DELETE FROM accounts`;
-        await db.query`DELETE FROM creditcards`;
+        await db.query`TRUNCATE accounts`;
+        await db.query`TRUNCATE creditcards`;
     });
 
 
-    it("saves and retrieves account", async function () {
+    it("Databases", async function () {
 
         let dataMapper = new DataMapper();
         dataMapper.setDataSource(db.query);

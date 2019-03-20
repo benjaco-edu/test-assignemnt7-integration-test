@@ -13,9 +13,7 @@ class Mysql{
     }
 
     async query (query, ...params){
-        let response = (await this.connection.query(query.join("?"), params))[0];
-        console.log(query, params, response);
-        return response;
+        return (await this.connection.query(query.join("?"), params))[0];
     }
 
 
