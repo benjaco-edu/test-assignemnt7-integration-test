@@ -4,6 +4,8 @@ class Sqlite{
 
     constructor(db = false) {
         this.db = db;
+        this.createDatabase = this.createDatabase.bind(this);
+        this.query = this.query.bind(this);
     }
 
     async createDatabase(location = ':memory:') {
