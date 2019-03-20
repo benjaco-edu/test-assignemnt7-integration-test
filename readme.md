@@ -1,7 +1,23 @@
+# Test Assignemnt 7 - Integration test
+
 https://github.com/datsoftlyngby/soft2019spring-test/blob/master/Assignments/07%20Integration%20Testing%20Assignment.pdf
 
+Testing database with
 
-### Test with external
+- mock - test/mockDatabase.js
+- sqlite memory - sqliteMemoryDatabase.js
+- sqlite file - sqliteFileDatabase.js
+- self starting/removing docker database - dockerDatabase.js
+
+The needed code for the bank eksampel can be found ad app/*.js
+
+In app/sqlExecuters/*.js can the database strategies be found, both with same "interface", both can be used interchangeable. I created them with the ES& template literal syntax to to get a really nice syntax for a prepare statement.
+
+I created a database helper for docker to test against a real mysql database, it starts a docker container, makes it ready, and deletes it again when the test is over. Found at test/dockerDB.js
+
+Because of the docker database, there is no docker image to run this assigment with one command (yes, you can bind a docker socket into a docker container or install docker in the container, but are not doing that this time, got some network issues that i didnt want to deal with)
+
+To test with external database (ex3), run following script to start op the external database.
 
 ```
 sudo docker run --rm --name my_mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=pass1234 -d mysql
@@ -30,18 +46,6 @@ create table creditcards  \
 mysql -u root -ppass1234 -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'pass1234'"
 ```
 
+To run the code, you have to have node and docker installed, and installed the packages with `npm i`
 
-
-
-
-
-
-
-
----
-
-
-I saw using a lot of time researching sql lite as an in memmory database, but at the end I ditched it, here is why:
-
-The sql queries and the way it runs differs to much, sql lite do not have datatypes, so the same sql statements could not be used.
-The create script did not work because of the datatypes, and sqlite relies on a special column called rowid, and have no autoincrement for other columns,
+The tests can be executed with `sudo npm test`, sudo is required to be able to talk with the docker socket.
