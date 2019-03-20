@@ -5,7 +5,7 @@ const DataMapper = require('./../app/DataMapper');
 const Sqllite = require('../app/sqlExecuters/Sqlite');
 
 
-describe("sqlite", function () {
+describe("sqlite memory", function () {
     let db;
     before(async  () => {
         db = new Sqllite(); // memory is the default in my
@@ -17,6 +17,8 @@ create table accounts
   id      INTEGER PRIMARY KEY AUTOINCREMENT ,
   balance double(11, 2)
 );
+`;
+        await db.query`
 create table creditcards
 (
   id            INTEGER PRIMARY KEY AUTOINCREMENT ,
@@ -30,7 +32,7 @@ create table creditcards
     });
     beforeEach(async () => {
         await db.query`DELETE FROM accounts`;
-       // await db.query`DELETE FROM creditcards`;
+        await db.query`DELETE FROM creditcards`;
     });
 
 

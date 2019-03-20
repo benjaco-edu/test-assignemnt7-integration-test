@@ -3,12 +3,17 @@ const expect = chai.expect;
 const Account = require('./../app/Account');
 const DataMapper = require('./../app/DataMapper');
 const Sqllite = require('../app/sqlExecuters/Sqlite');
+const fs = require("fs");
 
 
-describe("sqlite", function () {
+describe("sqlite file", function () {
     let db;
     before(async  () => {
         db = new Sqllite(); // memory is the default in my
+        try {
+            fs.unlinkSync("sqlite_test_db");
+        } catch (e) {
+        }
         await db.createDatabase("sqlite_test_db");
 
         await db.query`
@@ -17,6 +22,8 @@ create table accounts
   id      INTEGER PRIMARY KEY AUTOINCREMENT ,
   balance double(11, 2)
 );
+`;
+        await db.query`
 create table creditcards
 (
   id            INTEGER PRIMARY KEY AUTOINCREMENT ,
@@ -30,7 +37,7 @@ create table creditcards
     });
     beforeEach(async () => {
         await db.query`DELETE FROM accounts`;
-       // await db.query`DELETE FROM creditcards`;
+        await db.query`DELETE FROM creditcards`;
     });
 
 
