@@ -56,10 +56,6 @@ class DockerDB {
 
         await new Promise(resolve => setTimeout(resolve, 30000));
 
-        // console.log(this.setupScriptPath);
-        // await promisifyStream(await this.sqlContainer.fs.put(this.setupScriptPath, {
-        //     path: '/'
-        // }));
 
         await (await this.sqlContainer.exec.create({
             AttachStdout: false,
